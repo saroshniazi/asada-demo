@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASADA · AI Solution Architect & Delivery Agent</title>
+<style>
+:root {
+  --navy:   #0f1e3d;
+  --navy2:  #162440;
+  --blue:   #2563eb;
+  --blue2:  #1d4ed8;
+  --teal:   #0d9488;
+  --green:  #16a34a;
+  --amber:  #d97706;
+  --red:    #dc2626;
+  --purple: #7c3aed;
+  --g50:    #f8fafc;
+  --g100:   #f1f5f9;
+  --g200:   #e2e8f0;
+  --g300:   #cbd5e1;
+  --g400:   #94a3b8;
+  --g500:   #64748b;
+  --g600:   #475569;
+  --g700:   #334155;
+  --g800:   #1e293b;
+  --g900:   #0f172a;
+  --white:  #ffffff;
+  --sidebar:220px;
+  --topbar: 58px;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -1px rgba(0,0,0,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--g50);color:var(--g800);font-size:14px;line-height:1.5;}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ── Shell ── */
+.shell{display:flex;height:100vh;overflow:hidden;}
+
+/* ── Sidebar ── */
+.sidebar{width:var(--sidebar);background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;}
+.logo-wrap{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,#2563eb 0%,#0d9488 100%);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:-.5px;}
+.logo-text{color:#fff;font-size:14px;font-weight:700;letter-spacing:-.2px;line-height:1.2;}
+.logo-text small{display:block;font-size:9.5px;font-weight:400;color:rgba(255,255,255,.35);letter-spacing:.02em;margin-top:1px;}
+
+.nav-section{padding:18px 10px 4px;font-size:9.5px;font-weight:700;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.1em;}
+.nav-btn{display:flex;align-items:center;gap:9px;padding:8px 10px;margin:1px 6px;border-radius:7px;color:rgba(255,255,255,.55);font-size:12.5px;font-weight:500;cursor:pointer;border:none;background:none;width:calc(100% - 12px);text-align:left;transition:all .15s;}
+.nav-btn:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.85);}
+.nav-btn.active{background:rgba(37,99,235,.25);color:#fff;}
+.nav-btn.active .nav-icon{opacity:1;}
+.nav-icon{font-size:14px;width:16px;text-align:center;opacity:.6;flex-shrink:0;}
+.nav-pill{margin-left:auto;background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:8px;}
+.nav-pill.live{background:rgba(22,163,74,.25);color:#4ade80;}
+.nav-pill.warn{background:rgba(217,119,6,.25);color:#fbbf24;}
+
+.sidebar-foot{margin-top:auto;padding:12px 10px;border-top:1px solid rgba(255,255,255,.07);}
+.user-row{display:flex;align-items:center;gap:9px;padding:7px 6px;border-radius:7px;cursor:pointer;}
+.user-row:hover{background:rgba(255,255,255,.06);}
+.avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#0d9488);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.user-info{flex:1;min-width:0;}
+.user-name{font-size:12px;color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.user-role{font-size:10px;color:rgba(255,255,255,.35);}
+
+/* ── Main ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── Topbar ── */
+.topbar{height:var(--topbar);background:#fff;border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 22px;gap:14px;flex-shrink:0;}
+.page-title{font-size:15px;font-weight:700;color:var(--g900);flex:1;display:flex;align-items:center;gap:8px;}
+.breadcrumb{font-size:12px;color:var(--g400);font-weight:400;}
+.breadcrumb span{color:var(--g300);margin:0 4px;}
+
+.search-box{display:flex;align-items:center;gap:8px;background:var(--g50);border:1px solid var(--g200);border-radius:8px;padding:6px 12px;width:220px;transition:.15s;}
+.search-box:focus-within{border-color:#93c5fd;background:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.search-box input{background:none;border:none;outline:none;font-size:12.5px;color:var(--g700);width:100%;}
+.search-box input::placeholder{color:var(--g400);}
+
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap;font-family:inherit;}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 1px 2px rgba(37,99,235,.3);}
+.btn-primary:hover{background:var(--blue2);}
+.btn-ghost{background:transparent;color:var(--g500);padding:7px 10px;}
+.btn-ghost:hover{background:var(--g100);color:var(--g700);}
+.btn-outline{background:#fff;color:var(--g700);border:1px solid var(--g200);}
+.btn-outline:hover{background:var(--g50);border-color:var(--g300);}
+.btn-danger{background:#fef2f2;color:var(--red);border:1px solid #fecaca;}
+.btn-danger:hover{background:#fee2e2;}
+.icon-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:7px;cursor:pointer;color:var(--g500);background:none;border:none;transition:.15s;font-size:15px;}
+.icon-btn:hover{background:var(--g100);color:var(--g700);}
+.notif-wrap{position:relative;}
+.notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid #fff;}
+
+/* ── Content ── */
+.content{flex:1;overflow-y:auto;padding:22px;}
+
+/* ── Screens ── */
+.screen{display:none;animation:fadeIn .2s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Layout helpers ── */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;}
+.col-6-4{display:grid;grid-template-columns:3fr 2fr;gap:14px;margin-bottom:20px;}
+.col-7-3{display:grid;grid-template-columns:7fr 3fr;gap:14px;margin-bottom:20px;}
+.mb-20{margin-bottom:20px;}
+
+/* ── Card ── */
+.card{background:#fff;border-radius:var(--radius);border:1px solid var(--g200);box-shadow:var(--shadow);overflow:hidden;}
+.card-head{padding:14px 18px;border-bottom:1px solid var(--g100);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:13px;font-weight:600;color:var(--g800);}
+.card-body{padding:18px;}
+.card-body-sm{padding:14px 18px;}
+
+/* ── Stat card ── */
+.stat{background:#fff;border-radius:var(--radius);border:1px solid var(--g200);padding:18px;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.stat-accent{position:absolute;top:0;left:0;right:0;height:3px;}
+.stat-label{font-size:11px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;}
+.stat-value{font-size:28px;font-weight:800;color:var(--g900);letter-spacing:-1px;line-height:1;margin-bottom:6px;}
+.stat-sub{font-size:11.5px;color:var(--g400);}
+.stat-up{color:var(--green);font-weight:600;}
+.stat-icon{position:absolute;bottom:14px;right:16px;font-size:26px;opacity:.08;}
+
+/* ── Table ── */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:10.5px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.07em;padding:9px 16px;text-align:left;background:var(--g50);border-bottom:1px solid var(--g200);}
+.tbl td{padding:11px 16px;font-size:12.5px;color:var(--g700);border-bottom:1px solid var(--g100);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tbody tr{transition:.1s;}
+.tbl tbody tr:hover td{background:var(--g50);}
+
+/* ── Badge ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.b-blue{background:#dbeafe;color:#1d4ed8;}
+.b-green{background:#dcfce7;color:#15803d;}
+.b-amber{background:#fef3c7;color:#92400e;}
+.b-red{background:#fee2e2;color:#991b1b;}
+.b-gray{background:var(--g100);color:var(--g600);}
+.b-teal{background:#ccfbf1;color:#0f766e;}
+.b-purple{background:#ede9fe;color:#6d28d9;}
+.b-navy{background:#e0e7ff;color:#3730a3;}
+.live-dot::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;background:currentColor;animation:blink 1.6s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── Tag chip ── */
+.chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:500;background:var(--g100);color:var(--g600);margin:2px;}
+
+/* ── Progress ── */
+.prog{height:5px;background:var(--g100);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+.prog-blue{background:var(--blue);}
+.prog-green{background:var(--green);}
+.prog-teal{background:var(--teal);}
+.prog-amber{background:var(--amber);}
+.prog-red{background:var(--red);}
+
+/* ── Agent status ── */
+.agent-row{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--g100);transition:.1s;}
+.agent-row:last-child{border-bottom:none;}
+.agent-row:hover{background:var(--g50);}
+.a-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.a-dot.run{background:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.15);animation:pulse 1.4s ease infinite;}
+.a-dot.done{background:var(--green);}
+.a-dot.idle{background:var(--g300);}
+.a-dot.sched{background:var(--amber);}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(37,99,235,.15)}50%{box-shadow:0 0 0 5px rgba(37,99,235,.08)}}
+.a-name{font-size:12.5px;font-weight:600;color:var(--g700);width:130px;flex-shrink:0;}
+.a-task{font-size:11.5px;color:var(--g400);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.a-status{font-size:11px;font-weight:600;white-space:nowrap;}
+.a-status.run{color:var(--blue);}
+.a-status.done{color:var(--green);}
+.a-status.idle{color:var(--g400);}
+.a-status.sched{color:var(--amber);}
+
+/* ── Pipeline ── */
+.pipeline{display:flex;align-items:flex-start;padding:6px 0;}
+.step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;}
+.step:not(:last-child)::after{content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;background:var(--g200);z-index:0;}
+.step.done:not(:last-child)::after{background:var(--green);}
+.step.run:not(:last-child)::after{background:linear-gradient(90deg,var(--blue),var(--g200));}
+.step-c{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;z-index:1;position:relative;transition:.2s;}
+.step.done .step-c{background:var(--green);color:#fff;border:2px solid var(--green);}
+.step.run .step-c{background:var(--blue);color:#fff;border:2px solid var(--blue);box-shadow:0 0 0 4px rgba(37,99,235,.15);}
+.step.pending .step-c{background:#fff;color:var(--g400);border:2px solid var(--g200);}
+.step-lbl{font-size:10px;color:var(--g400);margin-top:6px;text-align:center;max-width:64px;line-height:1.3;}
+.step.done .step-lbl{color:var(--green);}
+.step.run .step-lbl{color:var(--blue);font-weight:600;}
+
+/* ── Code block ── */
+.code{background:#0f172a;border-radius:8px;padding:14px 16px;font-family:'Cascadia Code','Fira Code','JetBrains Mono',monospace;font-size:11.5px;color:#94a3b8;line-height:1.7;overflow-x:auto;}
+.code .kw{color:#7dd3fc;} .code .str{color:#86efac;} .code .fn{color:#c084fc;} .code .cmt{color:#475569;} .code .num{color:#fbbf24;}
+
+/* ── Timeline ── */
+.tl{padding-left:24px;position:relative;}
+.tl::before{content:'';position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--g200);}
+.tl-item{position:relative;margin-bottom:18px;}
+.tl-dot{position:absolute;left:-24px;top:2px;width:16px;height:16px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:8px;z-index:1;}
+.tl-dot.done{background:var(--green);color:#fff;}
+.tl-dot.run{background:var(--blue);color:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.2);}
+.tl-dot.pend{background:var(--g200);}
+.tl-title{font-size:12.5px;font-weight:600;color:var(--g700);}
+.tl-sub{font-size:11px;color:var(--g400);margin-top:1px;}
+.tl-time{font-size:10.5px;color:var(--g300);margin-top:2px;}
+
+/* ── Eval row ── */
+.eval-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--g100);}
+.eval-row:last-child{border-bottom:none;}
+.eval-name{font-size:12px;font-weight:500;color:var(--g600);width:170px;flex-shrink:0;}
+.eval-bar{flex:1;}
+.eval-score{font-size:13px;font-weight:700;color:var(--g800);width:40px;text-align:right;}
+.eval-verdict{font-size:10.5px;font-weight:700;width:36px;text-align:right;}
+
+/* ── Form ── */
+.form-lbl{font-size:11.5px;font-weight:600;color:var(--g600);display:block;margin-bottom:5px;}
+.form-inp{width:100%;padding:8px 11px;border:1px solid var(--g200);border-radius:7px;font-size:12.5px;color:var(--g800);background:#fff;outline:none;font-family:inherit;transition:.15s;}
+.form-inp:focus{border-color:#93c5fd;box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.form-group{margin-bottom:14px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+textarea.form-inp{resize:vertical;min-height:70px;}
+.check-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--g600);cursor:pointer;}
+.check-row input{accent-color:var(--blue);}
+
+/* ── Drop zone ── */
+.dropzone{border:2px dashed var(--g300);border-radius:10px;padding:36px;text-align:center;background:var(--g50);cursor:pointer;transition:.2s;}
+.dropzone:hover{border-color:var(--blue);background:#eff6ff;}
+.dz-icon{font-size:32px;margin-bottom:10px;}
+.dz-title{font-size:13.5px;font-weight:600;color:var(--g700);margin-bottom:4px;}
+.dz-sub{font-size:12px;color:var(--g400);}
+
+/* ── CRD tab strip ── */
+.crd-tabs{display:flex;gap:4px;background:var(--g100);padding:4px;border-radius:10px;margin-bottom:20px;}
+.crd-tab{flex:1;padding:8px 14px;border-radius:7px;border:none;font-size:12.5px;font-weight:500;color:var(--g500);background:none;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit;}
+.crd-tab:hover{color:var(--g700);}
+.crd-tab.active{background:#fff;color:var(--blue);font-weight:600;box-shadow:var(--shadow);}
+
+/* ── Arch canvas ── */
+.arch-canvas{background:#f8fafc;border:1px solid var(--g200);border-radius:10px;height:310px;position:relative;overflow:hidden;background-image:radial-gradient(circle,#cbd5e1 1px,transparent 1px);background-size:22px 22px;}
+.abox{position:absolute;background:#fff;border:1.5px solid var(--g200);border-radius:8px;padding:8px 12px;font-size:11px;font-weight:600;color:var(--g700);text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:.15s;min-width:88px;}
+.abox:hover{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.1),var(--shadow-md);z-index:5;}
+.abox .ai{font-size:17px;display:block;margin-bottom:3px;}
+.abox.aws{border-top:3px solid #ff9900;}
+.abox.az{border-top:3px solid #0078d4;}
+.abox.neutral{border-top:3px solid var(--teal);}
+
+/* ── Insight box ── */
+.insight{border-radius:8px;padding:10px 13px;font-size:11.5px;line-height:1.55;margin-bottom:8px;}
+.insight:last-child{margin-bottom:0;}
+.insight.green{background:#f0fdf4;border-left:3px solid var(--green);color:#166534;}
+.insight.amber{background:#fffbeb;border-left:3px solid var(--amber);color:#78350f;}
+.insight.blue{background:#eff6ff;border-left:3px solid var(--blue);color:#1e40af;}
+
+/* ── Section divider ── */
+.sec-div{font-size:10.5px;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:.1em;padding:12px 0 8px;border-bottom:1px solid var(--g100);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.sec-num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
+
+/* ── Gauge ── */
+.gauge-wrap{display:flex;align-items:center;gap:14px;}
+.gauge{position:relative;width:70px;height:70px;flex-shrink:0;}
+.gauge svg{transform:rotate(-90deg);}
+.gauge-val{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:15px;font-weight:800;color:var(--g800);}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--g300);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:var(--g400);}
+
+/* ── Misc ── */
+.divider{height:1px;background:var(--g100);margin:14px 0;}
+.row{display:flex;align-items:center;}
+.gap-2{gap:8px;} .gap-3{gap:12px;}
+.between{justify-content:space-between;}
+.flex{display:flex;}
+.col{flex-direction:column;}
+.txt-xs{font-size:11px;color:var(--g400);}
+.txt-sm{font-size:12px;color:var(--g500);}
+.fw6{font-weight:600;}
+.fw7{font-weight:700;}
+.c-blue{color:var(--blue);} .c-green{color:var(--green);} .c-amber{color:var(--amber);}
+.w-full{width:100%;}
+.mt-2{margin-top:8px;} .mb-2{margin-bottom:8px;}
+.text-center{text-align:center;}
+.loading-bar{height:3px;background:linear-gradient(90deg,transparent,var(--blue),transparent);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:2px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ═══ SIDEBAR ═══════════════════════════════════════════════ -->
+<nav class="sidebar">
+  <div class="logo-wrap">
+    <div class="logo-mark">A</div>
+    <div class="logo-text">ASADA<small>AI Solution Architect & Delivery Agent</small></div>
+  </div>
+
+  <div class="nav-section">Workspace</div>
+  <button class="nav-btn active" onclick="nav('dashboard')"><span class="nav-icon">⊞</span>Dashboard<span class="nav-pill live">3 live</span></button>
+  <button class="nav-btn" onclick="nav('crd')"><span class="nav-icon">📋</span>CRD<span class="nav-pill warn">2 new</span></button>
+  <button class="nav-btn" onclick="nav('proposals')"><span class="nav-icon">📄</span>Proposals</button>
+
+  <div class="nav-section">Design</div>
+  <button class="nav-btn" onclick="nav('architecture')"><span class="nav-icon">🏗️</span>Architecture</button>
+  <button class="nav-btn" onclick="nav('bom')"><span class="nav-icon">📊</span>BOM & Pricing</button>
+  <button class="nav-btn" onclick="nav('hyperscaler')"><span class="nav-icon">☁️</span>Hyperscalers</button>
+
+  <div class="nav-section">Delivery</div>
+  <button class="nav-btn" onclick="nav('deployment')"><span class="nav-icon">🚀</span>Deployment</button>
+  <button class="nav-btn" onclick="nav('testing')"><span class="nav-icon">✅</span>Testing & Evals</button>
+
+  <div class="nav-section">Platform</div>
+  <button class="nav-btn" onclick="nav('agents')"><span class="nav-icon">🤖</span>Agent Monitor</button>
+  <button class="nav-btn"><span class="nav-icon">⚙️</span>Settings</button>
+
+  <div class="sidebar-foot">
+    <div class="user-row">
+      <div class="avatar">SN</div>
+      <div class="user-info">
+        <div class="user-name">Sarosh Niazi</div>
+        <div class="user-role">Solution Architect</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ MAIN ═══════════════════════════════════════════════════ -->
+<div class="main">
+
+<!-- ══ DASHBOARD ══════════════════════════════════════════════ -->
+<div id="s-dashboard" class="screen active">
+  <div class="topbar">
+    <div class="page-title">Dashboard <span class="breadcrumb">Good morning, Sarosh</span></div>
+    <div class="search-box"><span style="color:var(--g400);font-size:13px">⌕</span><input placeholder="Search engagements, CRDs, proposals…"></div>
+    <div class="notif-wrap"><button class="icon-btn">🔔<div class="notif-dot"></div></button></div>
+    <button class="btn btn-primary" onclick="nav('crd')">＋ New Engagement</button>
+  </div>
+  <div class="content">
+    <div class="grid-4">
+      <div class="stat">
+        <div class="stat-accent" style="background:var(--blue)"></div>
+        <div class="stat-label">Active Proposals</div>
+        <div class="stat-value">12</div>
+        <div class="stat-sub"><span class="stat-up">↑ 4</span> this week</div>
+        <div class="stat-icon">📄</div>
+      </div>
+      <div class="stat">
+        <div class="stat-accent" style="background:var(--teal)"></div>
+        <div class="stat-label">CRDs Processed</div>
+        <div class="stat-value">47</div>
+        <div class="stat-sub"><span class="stat-up">↑ 8</span> this month</div>
+        <div class="stat-icon">📋</div>
+      </div>
+      <div class="stat">
+        <div class="stat-accent" style="background:var(--green)"></div>
+        <div class="stat-label">Deployments Live</div>
+        <div class="stat-value">9</div>
+        <div class="stat-sub"><span class="stat-up">↑ 2</span> this month</div>
+        <div class="stat-icon">🚀</div>
+      </div>
+      <div class="stat">
+        <div class="stat-accent" style="background:var(--amber)"></div>
+        <div class="stat-label">Avg. Time Saved</div>
+        <div class="stat-value">14h</div>
+        <div class="stat-sub">per engagement vs manual</div>
+        <div class="stat-icon">⏱</div>
+      </div>
+    </div>
+
+    <div class="col-6-4">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Recent Engagements</div>
+          <button class="btn btn-outline" style="font-size:11.5px;padding:5px 10px;">View all →</button>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>Customer</th><th>Stage</th><th>Hyperscaler</th><th>Value</th><th>Updated</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div style="font-size:13px;font-weight:600;color:var(--g800)">Acme Corporation</div><div class="txt-xs">Financial Services</div></td><td><span class="badge b-blue live-dot">Architecture</span></td><td><span class="chip">☁️ AWS</span></td><td class="fw6">$240K</td><td class="txt-xs">2h ago</td><td><button class="btn btn-ghost" style="font-size:11.5px;padding:4px 8px" onclick="nav('architecture')">Open →</button></td></tr>
+            <tr><td><div style="font-size:13px;font-weight:600;color:var(--g800)">TechNova Ltd</div><div class="txt-xs">Healthcare</div></td><td><span class="badge b-teal">Proposal</span></td><td><span class="chip">🔷 Azure</span></td><td class="fw6">$185K</td><td class="txt-xs">Yesterday</td><td><button class="btn btn-ghost" style="font-size:11.5px;padding:4px 8px">Open →</button></td></tr>
+            <tr><td><div style="font-size:13px;font-weight:600;color:var(--g800)">GlobalBank</div><div class="txt-xs">Banking & Finance</div></td><td><span class="badge b-purple live-dot">Deployment</span></td><td><span class="chip">🟡 GCP</span></td><td class="fw6">$520K</td><td class="txt-xs">3 days ago</td><td><button class="btn btn-ghost" style="font-size:11.5px;padding:4px 8px" onclick="nav('deployment')">Open →</button></td></tr>
+            <tr><td><div style="font-size:13px;font-weight:600;color:var(--g800)">RetailMax</div><div class="txt-xs">Retail & E-Commerce</div></td><td><span class="badge b-amber">BOM Review</span></td><td><span class="chip">🔴 OCI</span></td><td class="fw6">$95K</td><td class="txt-xs">5 days ago</td><td><button class="btn btn-ghost" style="font-size:11.5px;padding:4px 8px" onclick="nav('bom')">Open →</button></td></tr>
+            <tr><td><div style="font-size:13px;font-weight:600;color:var(--g800)">MedTech Inc</div><div class="txt-xs">Life Sciences</div></td><td><span class="badge b-green">Complete ✓</span></td><td><span class="chip">☁️ AWS</span></td><td class="fw6">$310K</td><td class="txt-xs">1 week ago</td><td><button class="btn btn-ghost" style="font-size:11.5px;padding:4px 8px">Open →</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex col gap-3" style="gap:14px">
+        <div class="card" style="flex:1">
+          <div class="card-head"><div class="card-title">🤖 ASADA Agents</div><span class="badge b-green live-dot">3 Running</span></div>
+          <div class="agent-row"><div class="a-dot run"></div><div class="a-name">Orchestrator</div><div class="a-task">Routing Acme Corp → Architecture</div><div class="a-status run">Running</div></div>
+          <div class="agent-row"><div class="a-dot run"></div><div class="a-name">Discovery</div><div class="a-task">Parsing GlobalBank CRD p.14/32</div><div class="a-status run">Running</div></div>
+          <div class="agent-row"><div class="a-dot run"></div><div class="a-name">Proposal Gen</div><div class="a-task">Writing executive summary…</div><div class="a-status run">Running</div></div>
+          <div class="agent-row"><div class="a-dot done"></div><div class="a-name">BOM & Pricing</div><div class="a-task">RetailMax BOM finalised</div><div class="a-status done">Done</div></div>
+          <div class="agent-row"><div class="a-dot done"></div><div class="a-name">Hyperscaler</div><div class="a-task">Azure recommended for TechNova</div><div class="a-status done">Done</div></div>
+          <div class="agent-row"><div class="a-dot idle"></div><div class="a-name">Deployment</div><div class="a-task">Awaiting proposal approval</div><div class="a-status idle">Idle</div></div>
+          <div class="agent-row"><div class="a-dot sched"></div><div class="a-name">Ref Curator</div><div class="a-task">Next crawl in 5h 44m</div><div class="a-status sched">Scheduled</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">📚 Ref Architecture Library</div></div>
+          <div class="card-body-sm">
+            <div class="row between mb-2"><span class="txt-sm">Total architectures</span><span style="font-size:22px;font-weight:800;color:var(--blue)">1,247</span></div>
+            <div class="divider"></div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="row between"><span class="txt-xs">☁️ AWS</span><span class="badge b-blue">412</span></div>
+              <div class="row between"><span class="txt-xs">🔷 Azure</span><span class="badge b-blue">389</span></div>
+              <div class="row between"><span class="txt-xs">🟡 GCP</span><span class="badge b-blue">298</span></div>
+              <div class="row between"><span class="txt-xs">🔴 OCI</span><span class="badge b-blue">148</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="row between"><span class="txt-xs">Last refreshed</span><span class="txt-xs">14 min ago</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Pipeline Overview</div></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:13px">
+          <div><div class="row between mb-2"><span class="txt-sm">CRD / RFP Intake</span><span class="txt-sm">5 engagements</span></div><div class="prog"><div class="prog-fill prog-blue" style="width:42%"></div></div></div>
+          <div><div class="row between mb-2"><span class="txt-sm">Architecture Design</span><span class="txt-sm">4 engagements</span></div><div class="prog"><div class="prog-fill prog-teal" style="width:33%"></div></div></div>
+          <div><div class="row between mb-2"><span class="txt-sm">Proposal & BOM</span><span class="txt-sm">2 engagements</span></div><div class="prog"><div class="prog-fill prog-amber" style="width:17%"></div></div></div>
+          <div><div class="row between mb-2"><span class="txt-sm">Deployment & Testing</span><span class="txt-sm">1 engagement</span></div><div class="prog"><div class="prog-fill prog-green" style="width:8%"></div></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Mistral AI Usage — Today</div><span class="badge b-teal">Open-source LLMs</span></div>
+        <div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+          <div class="row between"><div><div class="txt-sm fw6">Mistral Nemo · fast</div><div class="txt-xs">RFP parsing, BOM, extraction</div></div><div style="text-align:right"><div class="txt-sm fw7">14.2M tokens</div><div class="txt-xs c-green">$2.13</div></div></div>
+          <div class="row between"><div><div class="txt-sm fw6">Mistral Small 3 · balanced</div><div class="txt-xs">Architecture scoring, routing</div></div><div style="text-align:right"><div class="txt-sm fw7">4.8M tokens</div><div class="txt-xs c-green">$0.96</div></div></div>
+          <div class="row between"><div><div class="txt-sm fw6">Mistral Large 2 · powerful</div><div class="txt-xs">Proposals, deployment plans</div></div><div style="text-align:right"><div class="txt-sm fw7">0.3M tokens</div><div class="txt-xs c-green">$0.90</div></div></div>
+          <div class="row between"><div><div class="txt-sm fw6">Codestral · code</div><div class="txt-xs">Terraform, IaC generation</div></div><div style="text-align:right"><div class="txt-sm fw7">0.7M tokens</div><div class="txt-xs c-green">$0.21</div></div></div>
+          <div class="divider"></div>
+          <div class="row between"><span class="txt-sm fw6">Total today</span><span style="font-size:18px;font-weight:800;color:var(--blue)">$4.20</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CRD ════════════════════════════════════════════════════ -->
+<div id="s-crd" class="screen">
+  <div class="topbar">
+    <div class="page-title">CRD <span class="breadcrumb"><span>Workspace</span> / Customer Requirement Document</span></div>
+    <button class="btn btn-outline" id="crd-action-sec">📂 Browse Files</button>
+    <button class="btn btn-primary" id="crd-action-pri">＋ Upload RFP</button>
+  </div>
+  <div class="content">
+    <div class="crd-tabs">
+      <button id="ctab-rfp" class="crd-tab active" onclick="crdTab('rfp')">📄 RFP Intake</button>
+      <button id="ctab-crd" class="crd-tab" onclick="crdTab('crd')">📝 Customer Req. Document</button>
+      <button id="ctab-disc" class="crd-tab" onclick="crdTab('disc')">🔍 Discovery Questionnaire</button>
+    </div>
+
+    <!-- TAB: RFP -->
+    <div id="cpanel-rfp">
+      <div class="col-7-3">
+        <div>
+          <div class="card mb-20">
+            <div class="card-head"><div class="card-title">Upload RFP Document</div><span class="txt-xs">PDF, DOCX, TXT — max 50 MB</span></div>
+            <div class="card-body">
+              <div class="dropzone mb-2" style="margin-bottom:14px">
+                <div class="dz-icon">📄</div>
+                <div class="dz-title">Drop your RFP here, or click to browse</div>
+                <div class="dz-sub">ASADA will extract all requirements automatically using Mistral AI</div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-lbl">Customer Name</label><input class="form-inp" value="GlobalBank"></div>
+                <div class="form-group"><label class="form-lbl">Industry</label><select class="form-inp"><option>Banking & Finance</option><option>Healthcare</option><option>Retail</option><option>Government</option></select></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-lbl">Preferred Hyperscaler</label><select class="form-inp"><option>No preference — let ASADA recommend</option><option>AWS</option><option>Azure</option><option>GCP</option><option>OCI</option></select></div>
+                <div class="form-group"><label class="form-lbl">Budget Range</label><select class="form-inp"><option>$200K – $500K</option><option>$50K – $200K</option><option>$500K+</option></select></div>
+              </div>
+              <button class="btn btn-primary w-full" style="justify-content:center;padding:10px;margin-top:4px">🚀 Process RFP with ASADA Agents</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title">Processing — GlobalBank_RFP.pdf</div><div class="row gap-2"><span class="badge b-blue live-dot">In Progress</span></div></div>
+            <div class="card-body">
+              <div class="loading-bar mb-2" style="margin-bottom:12px"></div>
+              <div class="pipeline">
+                <div class="step done"><div class="step-c">✓</div><div class="step-lbl">Upload</div></div>
+                <div class="step done"><div class="step-c">✓</div><div class="step-lbl">Parse</div></div>
+                <div class="step run"><div class="step-c">3</div><div class="step-lbl">Extract Req.</div></div>
+                <div class="step pending"><div class="step-c">4</div><div class="step-lbl">Hyperscaler</div></div>
+                <div class="step pending"><div class="step-c">5</div><div class="step-lbl">Architecture</div></div>
+                <div class="step pending"><div class="step-c">6</div><div class="step-lbl">BOM</div></div>
+                <div class="step pending"><div class="step-c">7</div><div class="step-lbl">Proposal</div></div>
+                <div class="step pending"><div class="step-c">8</div><div class="step-lbl">Ready</div></div>
+              </div>
+              <div class="divider"></div>
+              <div style="background:var(--g900);border-radius:8px;padding:12px;font-family:monospace;font-size:11.5px;color:#94a3b8;line-height:1.8">
+                <div style="color:#4ade80">✓ PDF parsed — 32 pages, 14,820 tokens</div>
+                <div style="color:#4ade80">✓ Customer profile extracted — GlobalBank</div>
+                <div style="color:#60a5fa" class="live-dot" style="list-style:none"> Extracting requirements (page 14 of 32)…</div>
+                <div style="color:#475569">○ Hyperscaler scoring</div>
+                <div style="color:#475569">○ Architecture selection</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card mb-20">
+            <div class="card-head"><div class="card-title">Extracted Profile</div><span class="badge b-green">85% confidence</span></div>
+            <div class="card-body-sm" style="display:flex;flex-direction:column;gap:10px">
+              <div class="row between"><span class="txt-xs">Customer</span><span class="txt-sm fw6">GlobalBank</span></div>
+              <div class="row between"><span class="txt-xs">Industry</span><span class="txt-sm">Banking & Finance</span></div>
+              <div class="row between"><span class="txt-xs">Cloud Maturity</span><span class="badge b-amber">Intermediate</span></div>
+              <div class="row between"><span class="txt-xs">Budget</span><span class="txt-sm fw6">$400K – $600K</span></div>
+              <div class="row between"><span class="txt-xs">Timeline</span><span class="txt-sm">12 months</span></div>
+              <div class="row between"><span class="txt-xs">Compliance</span><div><span class="chip">PCI-DSS</span><span class="chip">SOC2</span></div></div>
+              <div class="divider"></div>
+              <div class="txt-xs mb-2">Key Requirements</div>
+              <div><span class="chip">HA Multi-region</span><span class="chip">EU data residency</span><span class="chip">99.99% SLA</span><span class="chip">Kubernetes</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title">Recent CRDs</div></div>
+            <table class="tbl">
+              <tbody>
+                <tr><td><div class="fw6" style="font-size:12.5px">GlobalBank_RFP.pdf</div><div class="txt-xs">Banking · RFP · 32 pages</div></td><td><span class="badge b-blue live-dot">Processing</span></td></tr>
+                <tr><td><div class="fw6" style="font-size:12.5px">TechNova_CRD.docx</div><div class="txt-xs">Healthcare · CRD Form</div></td><td><span class="badge b-green">Done</span></td></tr>
+                <tr><td><div class="fw6" style="font-size:12.5px">RetailMax_RFP.docx</div><div class="txt-xs">Retail · RFP · 18 pages</div></td><td><span class="badge b-green">Done</span></td></tr>
+                <tr><td><div class="fw6" style="font-size:12.5px">MedTech_Discovery.pdf</div><div class="txt-xs">Life Sciences · Discovery</div></td><td><span class="badge b-green">Done</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: CRD Form -->
+    <div id="cpanel-crd" style="display:none">
+      <div class="col-7-3">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Customer Requirements Document — Structured Entry</div><span class="txt-xs">No RFP document needed</span></div>
+          <div class="card-body">
+            <div style="background:#eff6ff;border-left:3px solid var(--blue);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:18px;font-size:12px;color:#1e40af">Use this when the customer has no formal RFP. ASADA generates the full architecture, BOM and proposal directly from these inputs.</div>
+            <div class="sec-div"><span class="sec-num" style="background:var(--blue)">1</span>Customer Profile</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-lbl">Customer Name *</label><input class="form-inp" placeholder="e.g. TechNova Ltd"></div>
+              <div class="form-group"><label class="form-lbl">Industry *</label><select class="form-inp"><option>Select industry…</option><option>Banking & Finance</option><option>Healthcare</option><option>Retail</option><option>Government / Public Sector</option><option>Manufacturing</option><option>Life Sciences</option><option>Telecommunications</option><option>Energy & Utilities</option></select></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-lbl">Company Size</label><select class="form-inp"><option>SMB (&lt;500 employees)</option><option>Mid-market (500–5,000)</option><option>Enterprise (5,000+)</option></select></div>
+              <div class="form-group"><label class="form-lbl">Cloud Maturity</label><select class="form-inp"><option>Cloud Naïve</option><option>Cloud Aware</option><option>Cloud Intermediate</option><option>Cloud Native</option></select></div>
+            </div>
+            <div class="sec-div"><span class="sec-num" style="background:var(--teal)">2</span>Solution Scope</div>
+            <div class="form-group"><label class="form-lbl">Business Problem / Objective *</label><textarea class="form-inp" placeholder="Describe the business challenge this solution must address…"></textarea></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-lbl">Solution Type</label><select class="form-inp"><option>Cloud Migration</option><option>New Cloud Build</option><option>AI / ML Platform</option><option>Data & Analytics</option><option>Application Modernisation</option><option>Disaster Recovery</option></select></div>
+              <div class="form-group"><label class="form-lbl">Preferred Hyperscaler</label><select class="form-inp"><option>No preference — ASADA decides</option><option>AWS</option><option>Microsoft Azure</option><option>Google Cloud</option><option>Oracle OCI</option><option>Multi-cloud</option></select></div>
+            </div>
+            <div class="sec-div"><span class="sec-num" style="background:var(--amber)">3</span>Technical Requirements</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-lbl">Availability SLA</label><select class="form-inp"><option>99.9% Standard</option><option>99.95% High</option><option>99.99% Mission Critical</option></select></div>
+              <div class="form-group"><label class="form-lbl">Peak Load / Users</label><input class="form-inp" placeholder="e.g. 50,000 concurrent users"></div>
+            </div>
+            <div class="form-group"><label class="form-lbl" style="margin-bottom:8px">Compliance Requirements</label>
+              <div style="display:flex;flex-wrap:wrap;gap:10px">
+                <label class="check-row"><input type="checkbox"> PCI-DSS</label>
+                <label class="check-row"><input type="checkbox"> HIPAA</label>
+                <label class="check-row"><input type="checkbox" checked> SOC 2</label>
+                <label class="check-row"><input type="checkbox"> GDPR</label>
+                <label class="check-row"><input type="checkbox"> FedRAMP</label>
+                <label class="check-row"><input type="checkbox"> ISO 27001</label>
+              </div>
+            </div>
+            <div class="sec-div"><span class="sec-num" style="background:var(--g500)">4</span>Commercial</div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-lbl">Budget Range</label><select class="form-inp"><option>Under $50K</option><option>$50K–$200K</option><option selected>$200K–$500K</option><option>$500K–$1M</option><option>$1M+</option></select></div>
+              <div class="form-group"><label class="form-lbl">Implementation Timeline</label><select class="form-inp"><option>&lt; 3 months</option><option>3–6 months</option><option selected>6–12 months</option><option>12–24 months</option></select></div>
+            </div>
+            <button class="btn btn-primary w-full" style="justify-content:center;padding:10px;margin-top:4px">🚀 Generate Architecture, BOM & Proposal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: Discovery -->
+    <div id="cpanel-disc" style="display:none">
+      <div class="col-7-3">
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">🔍 Discovery Questionnaire — GlobalBank</div>
+            <div class="row gap-2"><span class="badge b-teal">AI-Generated</span><span class="badge b-navy">Banking · PCI-DSS · SOC2</span></div>
+          </div>
+          <div class="card-body">
+            <div style="background:linear-gradient(135deg,#eff6ff,#f0fdfa);border-radius:9px;padding:14px;margin-bottom:20px">
+              <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:3px">ASADA tailored this questionnaire for GlobalBank</div>
+              <div class="txt-sm">Based on: Banking & Finance · Intermediate cloud maturity · PCI-DSS + SOC2 compliance. Questions target gaps before architecture design begins.</div>
+            </div>
+
+            <div class="sec-div"><span class="sec-num" style="background:var(--blue)">A</span>Current State & Infrastructure</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+              <div style="background:var(--g50);border-radius:8px;padding:13px">
+                <div class="form-lbl" style="margin-bottom:8px">A1. What is your current infrastructure setup?</div>
+                <select class="form-inp"><option>On-premises only</option><option selected>On-prem + partial cloud (hybrid)</option><option>Primarily cloud</option></select>
+              </div>
+              <div style="background:var(--g50);border-radius:8px;padding:13px">
+                <div class="form-lbl" style="margin-bottom:8px">A2. Which workloads are you migrating or building in the cloud?</div>
+                <textarea class="form-inp" placeholder="e.g. Core banking, payment processing, fraud detection…" style="min-height:56px"></textarea>
+              </div>
+              <div style="background:var(--g50);border-radius:8px;padding:13px">
+                <div class="form-lbl" style="margin-bottom:8px">A3. Do you have existing cloud agreements with any hyperscaler?</div>
+                <div style="display:flex;gap:14px;flex-wrap:wrap">
+                  <label class="check-row"><input type="checkbox" checked> AWS EDP</label>
+                  <label class="check-row"><input type="checkbox"> Azure EA</label>
+                  <label class="check-row"><input type="checkbox"> GCP CUD</label>
+                  <label class="check-row"><input type="checkbox"> OCI UCC</label>
+                  <label class="check-row"><input type="checkbox"> None</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="sec-div"><span class="sec-num" style="background:var(--teal)">B</span>Regulatory & Compliance (PCI-DSS / SOC2 specific)</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+              <div style="background:var(--g50);border-radius:8px;padding:13px">
+                <div class="form-lbl" style="margin-bottom:8px">B1. In which regions must cardholder data reside? (PCI-DSS Req. 3)</div>
+                <div style="display:flex;gap:14px;flex-wrap:wrap">
+                  <label class="check-row"><input type="checkbox" checked> EU only</label>
+                  <label class="check-row"><input type="checkbox"> US only</label>
+                  <label class="check-row"><input type="checkbox"> APAC</label>
+                  <label class="check-row"><input type="checkbox"> No restriction</label>
+                </div>
+              </div>
+              <div style="background:var(--g50);border-radius:8px;padding:13px">
+                <div class="form-lbl" style="margin-bottom:8px">B2. Do you require QSA sign-off before go-live?</div>
+                <div style="display:flex;gap:14px">
+                  <label class="check-row"><input type="radio" name="qsa" checked> Yes — QSA appointed</label>
+                  <label class="check-row"><input type="radio" name="qsa"> No</label>
+                  <label class="check-row"><input type="radio" name="qsa"> Not sure</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="sec-div"><span class="sec-num" style="background:var(--amber)">C</span>Performance & Availability</div>
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+              <div style="background:var(--g50);border-radius:8px;padding:13px">
+                <div class="form-lbl" style="margin-bottom:8px">C1. Peak transaction volume per second (TPS)?</div>
+                <input class="form-inp" placeholder="e.g. 10,000 TPS during market open hours">
+              </div>
+              <div style="background:var(--g50);border-radius:8px;padding:13px">
+                <div class="form-lbl" style="margin-bottom:8px">C2. RTO and RPO for critical systems?</div>
+                <div class="form-row" style="margin:0">
+                  <input class="form-inp" placeholder="RTO e.g. 15 min">
+                  <input class="form-inp" placeholder="RPO e.g. 5 min">
+                </div>
+              </div>
+            </div>
+
+            <div class="sec-div"><span class="sec-num" style="background:var(--g500)">D</span>Team & Operations</div>
+            <div style="background:var(--g50);border-radius:8px;padding:13px;margin-bottom:20px">
+              <div class="form-lbl" style="margin-bottom:8px">D1. Internal DevOps / cloud team capability post-deployment?</div>
+              <div style="display:flex;gap:14px;flex-wrap:wrap">
+                <label class="check-row"><input type="radio" name="devops"> Full in-house team</label>
+                <label class="check-row"><input type="radio" name="devops" checked> Partial — some expertise</label>
+                <label class="check-row"><input type="radio" name="devops"> None — fully managed preferred</label>
+              </div>
+            </div>
+
+            <div class="row gap-2" style="gap:10px">
+              <button class="btn btn-outline" style="flex:1;justify-content:center">📧 Send to Customer</button>
+              <button class="btn btn-primary" style="flex:1;justify-content:center">✅ Submit & Generate Architecture</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <div class="card-head"><div class="card-title">Questionnaire Progress</div></div>
+            <div class="card-body-sm" style="display:flex;flex-direction:column;gap:9px">
+              <div><div class="row between mb-2"><span class="txt-xs">A · Current State</span><span class="txt-xs c-green fw6">100%</span></div><div class="prog"><div class="prog-fill prog-green" style="width:100%"></div></div></div>
+              <div><div class="row between mb-2"><span class="txt-xs">B · Compliance</span><span class="txt-xs fw6" style="color:var(--teal)">80%</span></div><div class="prog"><div class="prog-fill prog-teal" style="width:80%"></div></div></div>
+              <div><div class="row between mb-2"><span class="txt-xs">C · Performance</span><span class="txt-xs c-amber fw6">50%</span></div><div class="prog"><div class="prog-fill prog-amber" style="width:50%"></div></div></div>
+              <div><div class="row between mb-2"><span class="txt-xs">D · Team & Ops</span><span class="txt-xs c-amber fw6">50%</span></div><div class="prog"><div class="prog-fill prog-amber" style="width:50%"></div></div></div>
+              <div class="divider"></div>
+              <div class="text-center" style="font-size:24px;font-weight:800;color:var(--blue)">70%<span style="font-size:12px;font-weight:400;color:var(--g400);margin-left:4px">complete</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title">📧 Share with Customer</div></div>
+            <div class="card-body-sm">
+              <div class="form-group"><label class="form-lbl">Customer Email</label><input class="form-inp" value="cto@globalbank.com"></div>
+              <div class="form-group"><label class="form-lbl">Response Deadline</label><input class="form-inp" value="2026-03-07"></div>
+              <button class="btn btn-outline w-full" style="justify-content:center;font-size:12px;margin-top:4px">📤 Send Secure Link</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><div class="card-title">ASADA Insights</div><span class="badge b-teal live-dot">Live</span></div>
+            <div class="card-body-sm" style="display:flex;flex-direction:column;gap:8px">
+              <div class="insight green"><strong>✓ AWS recommended</strong> — existing EDP agreement detected. Cost advantage ~12% vs list.</div>
+              <div class="insight amber"><strong>⚠ RTO/RPO missing</strong> — required before multi-region HA design. Add in section C.</div>
+              <div class="insight blue"><strong>ℹ Pattern triggered</strong> — PCI-DSS + EU residency → dedicated eu-west-1 + eu-central-1 design.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ARCHITECTURE ═══════════════════════════════════════════ -->
+<div id="s-architecture" class="screen">
+  <div class="topbar">
+    <div class="page-title">Architecture <span class="breadcrumb"><span>Acme Corp</span> / AWS Multi-Region HA</span></div>
+    <button class="btn btn-outline">⬇ Export XML</button>
+    <button class="btn btn-outline">📐 Edit Diagram</button>
+    <button class="btn btn-primary" onclick="nav('bom')">Generate BOM →</button>
+  </div>
+  <div class="content">
+    <div class="col-7-3">
+      <div>
+        <div class="card mb-20">
+          <div class="card-head">
+            <div class="card-title">Architecture Diagram — AWS Multi-Region</div>
+            <div class="row gap-2"><span class="badge b-green">AI-Generated</span><span class="badge b-teal">Freshness 0.94</span></div>
+          </div>
+          <div class="card-body" style="padding:12px">
+            <div class="arch-canvas">
+              <div class="abox neutral" style="left:18px;top:120px"><span class="ai">👥</span>Users</div>
+              <div class="abox aws" style="left:120px;top:30px"><span class="ai">🌐</span>CloudFront</div>
+              <div class="abox aws" style="left:120px;top:120px"><span class="ai">⚖️</span>ALB</div>
+              <div class="abox aws" style="left:120px;top:210px"><span class="ai">🛡️</span>WAF + Shield</div>
+              <div class="abox aws" style="left:248px;top:80px;min-width:104px"><span class="ai">⚙️</span>EKS Cluster<br><span style="font-size:9px;color:var(--g400)">3 AZ · Karpenter</span></div>
+              <div class="abox aws" style="left:380px;top:50px"><span class="ai">🗄️</span>RDS Aurora<br><span style="font-size:9px;color:var(--g400)">Multi-AZ</span></div>
+              <div class="abox aws" style="left:380px;top:148px"><span class="ai">⚡</span>ElastiCache<br><span style="font-size:9px;color:var(--g400)">Redis Cluster</span></div>
+              <div class="abox aws" style="left:380px;top:240px"><span class="ai">📦</span>S3 + Glacier</div>
+              <div class="abox aws" style="left:248px;top:200px;min-width:104px"><span class="ai">λ</span>Lambda<br><span style="font-size:9px;color:var(--g400)">Event-driven</span></div>
+              <div class="abox neutral" style="left:500px;top:88px"><span class="ai">🔑</span>KMS + Secrets</div>
+              <div class="abox neutral" style="left:500px;top:192px"><span class="ai">📊</span>CloudWatch</div>
+              <div style="position:absolute;bottom:10px;left:12px;font-size:10px;color:var(--g400);font-weight:500">Region: eu-west-1 + eu-central-1 · PCI-DSS compliant · 99.99% SLA</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Matching Reference Architectures</div><span class="txt-xs">Live-synced · Freshness scored</span></div>
+          <div class="card-body">
+            <div class="row gap-3" style="margin-bottom:14px">
+              <div style="width:46px;height:46px;background:#fff7ed;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">☁️</div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:600;margin-bottom:2px">AWS Well-Architected — Financial Services HA</div>
+                <div class="txt-xs">AWS Architecture Center · Updated 3 days ago · Similarity: <span class="c-green fw6">94%</span></div>
+              </div>
+              <span class="badge b-green">0.94</span>
+            </div>
+            <div style="font-size:12px;color:var(--g600);line-height:1.65">Multi-region active-passive with Aurora Global Database, EKS with Karpenter auto-scaling, WAF + Shield Advanced for DDoS protection, and PCI-DSS compliant VPC segmentation with flow logs enabled across both regions.</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Design Summary</div></div>
+          <div class="card-body-sm" style="display:flex;flex-direction:column;gap:10px">
+            <div class="row between"><span class="txt-xs">Pattern</span><span class="txt-sm fw6">Multi-Region HA</span></div>
+            <div class="row between"><span class="txt-xs">Hyperscaler</span><span class="chip">☁️ AWS</span></div>
+            <div class="row between"><span class="txt-xs">Primary Region</span><span class="txt-xs">eu-west-1</span></div>
+            <div class="row between"><span class="txt-xs">DR Region</span><span class="txt-xs">eu-central-1</span></div>
+            <div class="row between"><span class="txt-xs">Availability</span><span class="txt-sm fw6 c-green">99.99%</span></div>
+            <div class="row between"><span class="txt-xs">Compliance</span><div><span class="chip">PCI-DSS</span><span class="chip">SOC2</span></div></div>
+            <div class="divider"></div>
+            <div class="txt-xs mb-2">Core Services</div>
+            <div><span class="chip">EKS</span><span class="chip">Aurora</span><span class="chip">ElastiCache</span><span class="chip">CloudFront</span><span class="chip">S3</span><span class="chip">KMS</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">AI Confidence</div></div>
+          <div class="card-body-sm" style="display:flex;flex-direction:column;gap:9px">
+            <div><div class="row between mb-2"><span class="txt-xs">Architecture Match</span><span class="txt-xs c-green fw6">94%</span></div><div class="prog"><div class="prog-fill prog-green" style="width:94%"></div></div></div>
+            <div><div class="row between mb-2"><span class="txt-xs">Requirement Coverage</span><span class="txt-xs fw6" style="color:var(--teal)">88%</span></div><div class="prog"><div class="prog-fill prog-teal" style="width:88%"></div></div></div>
+            <div><div class="row between mb-2"><span class="txt-xs">Compliance Alignment</span><span class="txt-xs c-amber fw6">76%</span></div><div class="prog"><div class="prog-fill prog-amber" style="width:76%"></div></div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Complexity</div></div>
+          <div class="card-body">
+            <div class="gauge-wrap">
+              <div class="gauge">
+                <svg width="70" height="70" viewBox="0 0 70 70">
+                  <circle cx="35" cy="35" r="27" fill="none" stroke="var(--g100)" stroke-width="7"/>
+                  <circle cx="35" cy="35" r="27" fill="none" stroke="var(--amber)" stroke-width="7" stroke-dasharray="109" stroke-dashoffset="33" stroke-linecap="round"/>
+                </svg>
+                <div class="gauge-val">7</div>
+              </div>
+              <div><div style="font-size:13px;font-weight:600;color:var(--g800);margin-bottom:2px">High Complexity</div><div class="txt-xs">Multi-region + HA + PCI</div><div class="txt-xs" style="margin-top:4px">Est. delivery: <span class="fw6">14 weeks</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BOM ════════════════════════════════════════════════════ -->
+<div id="s-bom" class="screen">
+  <div class="topbar">
+    <div class="page-title">BOM & Pricing <span class="breadcrumb"><span>Acme Corp</span> / AWS · Live pricing</span></div>
+    <button class="btn btn-outline">⬇ Export Excel</button>
+    <button class="btn btn-outline">🔄 Refresh Prices</button>
+    <button class="btn btn-primary">Include in Proposal →</button>
+  </div>
+  <div class="content">
+    <div class="grid-3 mb-20">
+      <div class="stat"><div class="stat-accent" style="background:var(--blue)"></div><div class="stat-label">Monthly Estimate</div><div class="stat-value" style="font-size:24px">$18,420</div><div class="stat-sub">AWS list price</div></div>
+      <div class="stat"><div class="stat-accent" style="background:var(--teal)"></div><div class="stat-label">Annual (3-yr Reserved)</div><div class="stat-value" style="font-size:24px">$171,200</div><div class="stat-sub">With reserved instances</div></div>
+      <div class="stat"><div class="stat-accent" style="background:var(--green)"></div><div class="stat-label">vs On-Premises TCO</div><div class="stat-value" style="font-size:24px;color:var(--green)">32% saved</div><div class="stat-sub">Over 3 years</div></div>
+    </div>
+    <div class="col-7-3">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Bill of Materials — Line Items</div><div class="row gap-2"><span class="badge b-blue">18 items</span><button class="btn btn-ghost" style="font-size:11.5px;padding:4px 8px">＋ Add Service</button></div></div>
+        <table class="tbl">
+          <thead><tr><th>Service</th><th>Configuration</th><th>Qty</th><th>Unit/mo</th><th>Total/mo</th><th></th></tr></thead>
+          <tbody>
+            <tr><td><div class="row gap-2"><div style="width:28px;height:28px;background:#fff7ed;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">⚙️</div><div><div class="fw6" style="font-size:12.5px">Amazon EKS</div><div class="txt-xs">Cluster + worker nodes</div></div></div></td><td><span class="chip">m6i.2xlarge × 6</span></td><td>6</td><td class="fw6">$576</td><td class="fw7 c-blue">$3,456</td><td><button class="btn btn-ghost" style="font-size:11px;padding:3px 7px">Edit</button></td></tr>
+            <tr><td><div class="row gap-2"><div style="width:28px;height:28px;background:#eff6ff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🗄️</div><div><div class="fw6" style="font-size:12.5px">RDS Aurora</div><div class="txt-xs">PostgreSQL · Multi-AZ</div></div></div></td><td><span class="chip">r6g.2xlarge</span></td><td>2</td><td class="fw6">$1,042</td><td class="fw7 c-blue">$2,084</td><td><button class="btn btn-ghost" style="font-size:11px;padding:3px 7px">Edit</button></td></tr>
+            <tr><td><div class="row gap-2"><div style="width:28px;height:28px;background:#f5f3ff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">⚡</div><div><div class="fw6" style="font-size:12.5px">ElastiCache Redis</div><div class="txt-xs">Cluster Mode · 3 shards</div></div></div></td><td><span class="chip">r6g.large × 3</span></td><td>3</td><td class="fw6">$218</td><td class="fw7 c-blue">$654</td><td><button class="btn btn-ghost" style="font-size:11px;padding:3px 7px">Edit</button></td></tr>
+            <tr><td><div class="row gap-2"><div style="width:28px;height:28px;background:#f0fdf4;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🌐</div><div><div class="fw6" style="font-size:12.5px">CloudFront CDN</div><div class="txt-xs">5TB/mo transfer</div></div></div></td><td><span class="chip">5,000 GB/mo</span></td><td>1</td><td class="fw6">$425</td><td class="fw7 c-blue">$425</td><td><button class="btn btn-ghost" style="font-size:11px;padding:3px 7px">Edit</button></td></tr>
+            <tr><td><div class="row gap-2"><div style="width:28px;height:28px;background:#fff7ed;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🛡️</div><div><div class="fw6" style="font-size:12.5px">AWS Shield Advanced</div><div class="txt-xs">DDoS · PCI required</div></div></div></td><td><span class="chip">Advanced tier</span></td><td>1</td><td class="fw6">$3,000</td><td class="fw7 c-blue">$3,000</td><td><button class="btn btn-ghost" style="font-size:11px;padding:3px 7px">Edit</button></td></tr>
+            <tr><td colspan="4" class="txt-xs" style="padding:8px 16px;color:var(--g400)">＋ 13 more items (S3, WAF, Route53, KMS, CloudWatch, VPC, Lambda…)</td><td class="fw7 c-blue">$8,801</td><td></td></tr>
+            <tr style="background:var(--g50)"><td colspan="4" style="padding:12px 16px;font-size:14px;font-weight:700">TOTAL (Monthly)</td><td style="padding:12px 16px;font-size:17px;font-weight:800;color:var(--blue)">$18,420</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Hyperscaler Comparison</div></div>
+          <div class="card-body-sm" style="display:flex;flex-direction:column;gap:10px">
+            <div class="row between"><span class="txt-sm">☁️ AWS <span class="badge b-amber" style="margin-left:4px;font-size:10px">Selected</span></span><span class="fw7 c-blue">$18,420/mo</span></div>
+            <div class="row between"><span class="txt-sm">🔷 Azure</span><span class="fw6">$19,840/mo</span></div>
+            <div class="row between"><span class="txt-sm">🟡 GCP</span><span class="fw6">$17,290/mo</span></div>
+            <div class="row between"><span class="txt-sm">🔴 OCI</span><span class="fw6">$14,120/mo</span></div>
+            <div class="divider"></div>
+            <div class="txt-xs">Live pricing from hyperscaler APIs · refreshed 2h ago</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Cost Breakdown</div></div>
+          <div class="card-body-sm" style="display:flex;flex-direction:column;gap:9px">
+            <div><div class="row between mb-2"><span class="txt-xs">Compute (EKS)</span><span class="txt-xs fw6">19%</span></div><div class="prog"><div class="prog-fill prog-blue" style="width:19%"></div></div></div>
+            <div><div class="row between mb-2"><span class="txt-xs">Security (Shield)</span><span class="txt-xs fw6">16%</span></div><div class="prog"><div class="prog-fill prog-amber" style="width:16%"></div></div></div>
+            <div><div class="row between mb-2"><span class="txt-xs">Database (RDS)</span><span class="txt-xs fw6">11%</span></div><div class="prog"><div class="prog-fill prog-teal" style="width:11%"></div></div></div>
+            <div><div class="row between mb-2"><span class="txt-xs">All Other Services</span><span class="txt-xs fw6">54%</span></div><div class="prog"><div class="prog-fill prog-green" style="width:54%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DEPLOYMENT ════════════════════════════════════════════ -->
+<div id="s-deployment" class="screen">
+  <div class="topbar">
+    <div class="page-title">Deployment <span class="breadcrumb"><span>GlobalBank</span> / AWS eu-west-1</span></div>
+    <button class="btn btn-outline">📋 View IaC</button>
+    <button class="btn btn-outline">🔄 Refresh</button>
+    <button class="btn btn-danger">⏹ Rollback</button>
+  </div>
+  <div class="content">
+    <div class="card mb-20">
+      <div class="card-head"><div class="card-title">Deployment Pipeline — Stage 5 of 8</div><span class="badge b-blue live-dot">Provisioning</span></div>
+      <div class="card-body">
+        <div class="loading-bar mb-2" style="margin-bottom:14px"></div>
+        <div class="pipeline">
+          <div class="step done"><div class="step-c">✓</div><div class="step-lbl">Plan</div></div>
+          <div class="step done"><div class="step-c">✓</div><div class="step-lbl">Validate IaC</div></div>
+          <div class="step done"><div class="step-c">✓</div><div class="step-lbl">Security Scan</div></div>
+          <div class="step done"><div class="step-c">✓</div><div class="step-lbl">Cost Check</div></div>
+          <div class="step run"><div class="step-c">5</div><div class="step-lbl">Provision</div></div>
+          <div class="step pending"><div class="step-c">6</div><div class="step-lbl">Configure</div></div>
+          <div class="step pending"><div class="step-c">7</div><div class="step-lbl">Verify</div></div>
+          <div class="step pending"><div class="step-c">8</div><div class="step-lbl">Go-Live</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-7-3">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Generated IaC — Terraform · AWS</div><div class="row gap-2"><span class="badge b-green">OPA Passed ✓</span><span class="badge b-purple">Codestral</span></div></div>
+          <div class="code">
+            <div><span class="kw">module</span> <span class="str">"eks_cluster"</span> {</div>
+            <div style="padding-left:16px"><span class="kw">source</span>  = <span class="str">"terraform-aws-modules/eks/aws"</span></div>
+            <div style="padding-left:16px"><span class="kw">version</span> = <span class="str">"~> 20.0"</span></div>
+            <div style="padding-left:16px"> </div>
+            <div style="padding-left:16px"><span class="kw">cluster_name</span>    = <span class="str">"globalbank-prod-eks"</span></div>
+            <div style="padding-left:16px"><span class="kw">cluster_version</span> = <span class="str">"1.29"</span></div>
+            <div style="padding-left:16px"><span class="kw">vpc_id</span>          = <span class="fn">module.vpc.vpc_id</span></div>
+            <div style="padding-left:16px"><span class="kw">subnet_ids</span>      = <span class="fn">module.vpc.private_subnets</span></div>
+            <div style="padding-left:16px"> </div>
+            <div style="padding-left:16px"><span class="cmt"># OPA guardrail: encryption enforced</span></div>
+            <div style="padding-left:16px"><span class="kw">cluster_encryption_config</span> = {</div>
+            <div style="padding-left:32px"><span class="kw">resources</span>        = [<span class="str">"secrets"</span>]</div>
+            <div style="padding-left:32px"><span class="kw">provider_key_arn</span> = <span class="fn">aws_kms_key.eks.arn</span></div>
+            <div style="padding-left:16px">}</div>
+            <div>}</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">🛡️ OPA Guardrail Results</div><span class="badge b-green">8 / 8 Passed</span></div>
+          <table class="tbl">
+            <tbody>
+              <tr><td>🔐 Encryption at rest enforced</td><td style="text-align:right"><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>🌍 Data residency EU only</td><td style="text-align:right"><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>💰 Cost within $25K/mo budget</td><td style="text-align:right"><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>🔒 No hardcoded secrets in IaC</td><td style="text-align:right"><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>🔑 OIDC federation (no static keys)</td><td style="text-align:right"><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>📋 Audit logging enabled</td><td style="text-align:right"><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>🛡️ WAF attached to ALB</td><td style="text-align:right"><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>📦 Images from approved registry</td><td style="text-align:right"><span class="badge b-green">✓ Pass</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Deployment Log</div></div>
+          <div class="card-body">
+            <div class="tl">
+              <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-title">Terraform Plan</div><div class="tl-sub">18 resources to add · 0 destroy</div><div class="tl-time">10:02 AM</div></div>
+              <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-title">IaC validation passed</div><div class="tl-sub">tfsec + checkov · no criticals</div><div class="tl-time">10:04 AM</div></div>
+              <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-title">Security scan complete</div><div class="tl-sub">0 critical · 2 low (acknowledged)</div><div class="tl-time">10:07 AM</div></div>
+              <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-title">Cost guardrail passed</div><div class="tl-sub">$18,420/mo · within $25K limit</div><div class="tl-time">10:08 AM</div></div>
+              <div class="tl-item"><div class="tl-dot run"></div><div class="tl-title">Provisioning resources…</div><div class="tl-sub">VPC created · EKS cluster creating</div><div class="tl-time">10:12 AM · now</div></div>
+              <div class="tl-item"><div class="tl-dot pend"></div><div class="tl-title">Application configuration</div><div class="tl-sub">Helm charts, secrets, DNS</div><div class="tl-time">Pending</div></div>
+              <div class="tl-item" style="margin-bottom:0"><div class="tl-dot pend"></div><div class="tl-title">Go-Live cutover</div><div class="tl-sub">DNS flip + monitoring</div><div class="tl-time">Pending</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Environments</div></div>
+          <table class="tbl">
+            <tbody>
+              <tr><td>🟢 Development</td><td><span class="badge b-green">Live</span></td><td class="txt-xs">v1.4.2</td></tr>
+              <tr><td>🟢 Staging</td><td><span class="badge b-green">Live</span></td><td class="txt-xs">v1.4.2</td></tr>
+              <tr><td>🔵 UAT</td><td><span class="badge b-teal">Awaiting sign-off</span></td><td class="txt-xs">3/5 signed</td></tr>
+              <tr><td>🟡 Production</td><td><span class="badge b-amber live-dot">Provisioning</span></td><td class="txt-xs">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TESTING ══════════════════════════════════════════════ -->
+<div id="s-testing" class="screen">
+  <div class="topbar">
+    <div class="page-title">Testing & Evals <span class="breadcrumb"><span>GlobalBank</span> / v1.4.2</span></div>
+    <button class="btn btn-outline">⬇ Export Report</button>
+    <button class="btn btn-primary">▶ Run All Evals</button>
+  </div>
+  <div class="content">
+    <div class="grid-4 mb-20">
+      <div class="stat"><div class="stat-accent" style="background:var(--green)"></div><div class="stat-label">Tests Passed</div><div class="stat-value">312</div><div class="stat-sub"><span class="stat-up">98.7%</span> pass rate</div></div>
+      <div class="stat"><div class="stat-accent" style="background:var(--red)"></div><div class="stat-label">Tests Failed</div><div class="stat-value" style="color:var(--red)">4</div><div class="stat-sub" style="color:var(--red)">2 critical</div></div>
+      <div class="stat"><div class="stat-accent" style="background:var(--blue)"></div><div class="stat-label">AI Eval Score</div><div class="stat-value">0.87</div><div class="stat-sub"><span class="stat-up">Above threshold</span></div></div>
+      <div class="stat"><div class="stat-accent" style="background:var(--amber)"></div><div class="stat-label">UAT Sign-offs</div><div class="stat-value">3/5</div><div class="stat-sub">2 pending</div></div>
+    </div>
+    <div class="col-7-3">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Test Suites — Auto-generated by ASADA</div></div>
+          <table class="tbl">
+            <thead><tr><th>Suite</th><th>Tests</th><th>Passed</th><th>Failed</th><th>Duration</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td>Unit Tests</td><td>148</td><td class="c-green fw6">148</td><td>0</td><td class="txt-xs">1m 24s</td><td><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>Integration</td><td>64</td><td class="c-green fw6">62</td><td style="color:var(--red);font-weight:600">2</td><td class="txt-xs">3m 41s</td><td><span class="badge b-amber">⚠ Partial</span></td></tr>
+              <tr><td>E2E — Playwright</td><td>32</td><td class="c-green fw6">30</td><td style="color:var(--red);font-weight:600">2</td><td class="txt-xs">8m 12s</td><td><span class="badge b-amber">⚠ Partial</span></td></tr>
+              <tr><td>Load — Locust</td><td>8</td><td class="c-green fw6">8</td><td>0</td><td class="txt-xs">15m 00s</td><td><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>Security — OWASP ZAP</td><td>24</td><td class="c-green fw6">24</td><td>0</td><td class="txt-xs">22m 08s</td><td><span class="badge b-green">✓ Pass</span></td></tr>
+              <tr><td>Compliance — PCI-DSS</td><td>36</td><td class="c-green fw6">36</td><td>0</td><td class="txt-xs">5m 30s</td><td><span class="badge b-green">✓ Pass</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">AI Evaluation Scores — Mistral + Ragas</div></div>
+          <div class="card-body" style="display:flex;flex-direction:column">
+            <div class="eval-row"><div class="eval-name">Hallucination Detection</div><div class="eval-bar"><div class="prog"><div class="prog-fill prog-green" style="width:92%"></div></div></div><div class="eval-score">0.92</div><div class="eval-verdict c-green">PASS</div></div>
+            <div class="eval-row"><div class="eval-name">RAG Faithfulness</div><div class="eval-bar"><div class="prog"><div class="prog-fill prog-green" style="width:89%"></div></div></div><div class="eval-score">0.89</div><div class="eval-verdict c-green">PASS</div></div>
+            <div class="eval-row"><div class="eval-name">Answer Relevance</div><div class="eval-bar"><div class="prog"><div class="prog-fill prog-teal" style="width:87%"></div></div></div><div class="eval-score">0.87</div><div class="eval-verdict c-green">PASS</div></div>
+            <div class="eval-row"><div class="eval-name">Context Recall</div><div class="eval-bar"><div class="prog"><div class="prog-fill prog-amber" style="width:78%"></div></div></div><div class="eval-score">0.78</div><div class="eval-verdict c-green">PASS</div></div>
+            <div class="eval-row"><div class="eval-name">Bias & Safety</div><div class="eval-bar"><div class="prog"><div class="prog-fill prog-green" style="width:96%"></div></div></div><div class="eval-score">0.96</div><div class="eval-verdict c-green">PASS</div></div>
+            <div class="eval-row"><div class="eval-name">Consistency</div><div class="eval-bar"><div class="prog"><div class="prog-fill prog-amber" style="width:71%"></div></div></div><div class="eval-score">0.71</div><div class="eval-verdict c-amber">WARN</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">UAT Sign-off Portal</div><span class="badge b-amber">3/5 Done</span></div>
+          <div class="card-body-sm" style="display:flex;flex-direction:column;gap:10px">
+            <div class="row between"><div><div class="txt-sm fw6">User Login Flow</div><div class="txt-xs">Sarosh Niazi · 2h ago</div></div><span class="badge b-green">✓ Signed</span></div>
+            <div class="row between"><div><div class="txt-sm fw6">Payment Processing</div><div class="txt-xs">Sarah Chen · Yesterday</div></div><span class="badge b-green">✓ Signed</span></div>
+            <div class="row between"><div><div class="txt-sm fw6">Reporting Module</div><div class="txt-xs">James Liu · 3d ago</div></div><span class="badge b-green">✓ Signed</span></div>
+            <div class="row between"><div><div class="txt-sm fw6">Data Export (PCI)</div><div class="txt-xs">Pending: Maria Gomez</div></div><span class="badge b-amber">⏳ Pending</span></div>
+            <div class="row between"><div><div class="txt-sm fw6">Disaster Recovery</div><div class="txt-xs">Pending: Ahmad Shah</div></div><span class="badge b-amber">⏳ Pending</span></div>
+            <div class="divider"></div>
+            <div style="background:#fffbeb;border-radius:7px;padding:10px;font-size:11.5px;color:#78350f">⚠️ Go-live blocked until all 5 sign-offs complete.</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Failed Tests</div></div>
+          <div class="card-body-sm" style="display:flex;flex-direction:column;gap:8px">
+            <div style="background:#fef2f2;border-left:3px solid var(--red);border-radius:0 7px 7px 0;padding:10px;font-size:12px"><div class="fw6" style="color:var(--red);margin-bottom:2px">E2E: Checkout timeout on Safari</div><div style="color:#b91c1c">Payment form &gt;3s. Expected: &lt;1s</div></div>
+            <div style="background:#fef2f2;border-left:3px solid var(--red);border-radius:0 7px 7px 0;padding:10px;font-size:12px"><div class="fw6" style="color:var(--red);margin-bottom:2px">Integration: S3 URL expiry</div><div style="color:#b91c1c">Expiry 7200s — policy requires ≤3600s</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ AGENTS ════════════════════════════════════════════════ -->
+<div id="s-agents" class="screen">
+  <div class="topbar">
+    <div class="page-title">Agent Monitor <span class="breadcrumb">Real-time · All 9 agents</span></div>
+    <button class="btn btn-outline">📊 LangSmith →</button>
+    <button class="btn btn-primary">⏸ Pause All</button>
+  </div>
+  <div class="content">
+    <div class="grid-4 mb-20">
+      <div class="stat"><div class="stat-accent" style="background:var(--blue)"></div><div class="stat-label">Active Agents</div><div class="stat-value">3</div><div class="stat-sub">of 9 running</div></div>
+      <div class="stat"><div class="stat-accent" style="background:var(--green)"></div><div class="stat-label">Tasks Today</div><div class="stat-value">1,284</div><div class="stat-sub"><span class="stat-up">↑ 47</span> since 9am</div></div>
+      <div class="stat"><div class="stat-accent" style="background:var(--teal)"></div><div class="stat-label">Avg Latency</div><div class="stat-value">1.8s</div><div class="stat-sub">per Mistral call</div></div>
+      <div class="stat"><div class="stat-accent" style="background:var(--amber)"></div><div class="stat-label">LLM Cost Today</div><div class="stat-value">$4.20</div><div class="stat-sub">All Mistral tiers</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-head"><div class="card-title">Agent Activity</div></div>
+        <table class="tbl">
+          <thead><tr><th>Agent</th><th>Model</th><th>Status</th><th>Current Task</th></tr></thead>
+          <tbody>
+            <tr><td class="fw6">Orchestrator</td><td><span class="badge b-blue">balanced</span></td><td><span class="badge b-green live-dot">Running</span></td><td class="txt-xs">Routing Acme Corp → Architecture Agent</td></tr>
+            <tr><td class="fw6">Discovery</td><td><span class="badge b-gray">fast</span></td><td><span class="badge b-green live-dot">Running</span></td><td class="txt-xs">Parsing GlobalBank CRD p.14/32</td></tr>
+            <tr><td class="fw6">Architecture Design</td><td><span class="badge b-blue">balanced</span></td><td><span class="badge b-gray">Idle</span></td><td class="txt-xs">—</td></tr>
+            <tr><td class="fw6">Proposal Gen</td><td><span class="badge b-purple">powerful</span></td><td><span class="badge b-green live-dot">Running</span></td><td class="txt-xs">Writing Section 3 — Proposed Solution</td></tr>
+            <tr><td class="fw6">BOM & Pricing</td><td><span class="badge b-gray">fast</span></td><td><span class="badge b-gray">Idle</span></td><td class="txt-xs">—</td></tr>
+            <tr><td class="fw6">Hyperscaler</td><td><span class="badge b-blue">balanced</span></td><td><span class="badge b-gray">Idle</span></td><td class="txt-xs">—</td></tr>
+            <tr><td class="fw6">Ref Curator</td><td><span class="badge b-gray">fast</span></td><td><span class="badge b-amber">Scheduled</span></td><td class="txt-xs">Next crawl in 5h 44m</td></tr>
+            <tr><td class="fw6">Deployment</td><td><span class="badge b-amber" style="background:#fef3c7;color:#92400e">code</span></td><td><span class="badge b-green live-dot">Running</span></td><td class="txt-xs">Provisioning GlobalBank EKS cluster</td></tr>
+            <tr><td class="fw6">Testing & Eval</td><td><span class="badge b-purple">powerful</span></td><td><span class="badge b-gray">Idle</span></td><td class="txt-xs">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Mistral API Usage — Today</div><span class="badge b-teal">Open-source</span></div>
+          <div class="card-body-sm" style="display:flex;flex-direction:column;gap:10px">
+            <div class="row between"><div><div class="txt-sm fw6">Nemo · fast</div><div class="txt-xs">Extraction, BOM, parsing</div></div><div style="text-align:right"><div class="txt-sm fw7">14.2M tokens</div><div class="txt-xs c-green">$2.13</div></div></div>
+            <div class="row between"><div><div class="txt-sm fw6">Small 3 · balanced</div><div class="txt-xs">Architecture, scoring</div></div><div style="text-align:right"><div class="txt-sm fw7">4.8M tokens</div><div class="txt-xs c-green">$0.96</div></div></div>
+            <div class="row between"><div><div class="txt-sm fw6">Large 2 · powerful</div><div class="txt-xs">Proposals, deployment</div></div><div style="text-align:right"><div class="txt-sm fw7">0.3M tokens</div><div class="txt-xs c-green">$0.90</div></div></div>
+            <div class="row between"><div><div class="txt-sm fw6">Codestral · code</div><div class="txt-xs">Terraform, IaC</div></div><div style="text-align:right"><div class="txt-sm fw7">0.7M tokens</div><div class="txt-xs c-green">$0.21</div></div></div>
+            <div class="divider"></div>
+            <div class="row between"><span class="fw6">Total today</span><span style="font-size:20px;font-weight:800;color:var(--blue)">$4.20</span></div>
+            <div class="row between"><span class="txt-xs">Projected monthly</span><span class="txt-xs fw6">~$147</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">ASADA FSM</div></div>
+          <div class="card-body-sm">
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">
+              <span class="badge b-gray">IDLE</span><span class="txt-xs">→</span>
+              <span class="badge b-blue">INTAKE</span><span class="txt-xs">→</span>
+              <span class="badge b-blue">DISCOVERY</span><span class="txt-xs">→</span>
+              <span class="badge b-teal">ARCHITECTURE</span><span class="txt-xs">→</span>
+              <span class="badge b-teal">BOM</span><span class="txt-xs">→</span>
+              <span class="badge b-teal">PROPOSAL</span><span class="txt-xs">→</span>
+              <span class="badge b-purple">DEPLOY</span><span class="txt-xs">→</span>
+              <span class="badge b-purple">TESTING</span><span class="txt-xs">→</span>
+              <span class="badge b-green">GO_LIVE</span>
+            </div>
+            <div class="row gap-2"><div style="width:9px;height:9px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.2);animation:pulse 1.4s infinite"></div><span style="font-size:12px;color:var(--blue);font-weight:600">Current: DISCOVERY (GlobalBank)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+function nav(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('s-' + id);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick') === "nav('" + id + "')");
+  });
+}
+
+const crdActions = { rfp:['📂 Browse Files','＋ Upload RFP'], crd:['💾 Save Draft','🚀 Generate from CRD'], disc:['📤 Send to Customer','✅ Submit & Generate'] };
+function crdTab(t) {
+  ['rfp','crd','disc'].forEach(x => {
+    document.getElementById('cpanel-' + x).style.display = x === t ? 'block' : 'none';
+    const b = document.getElementById('ctab-' + x);
+    b.classList.toggle('active', x === t);
+  });
+  const [sec, pri] = crdActions[t];
+  document.getElementById('crd-action-sec').textContent = sec;
+  document.getElementById('crd-action-pri').textContent = pri;
+}
+</script>
+</body>
+</html>
